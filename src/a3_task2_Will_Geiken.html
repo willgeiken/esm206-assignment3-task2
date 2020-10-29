@@ -9,7 +9,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
-<meta name="author" content="ESM 206 Fall 2020" />
+<meta name="author" content="ESM 206 Fall 2020 + Will Geiken" />
 
 
 <title>Follow me: more data wrangling tools</title>
@@ -364,7 +364,7 @@ summary {
 
 <h1 class="title toc-ignore">Follow me: more data wrangling tools</h1>
 <h3 class="subtitle">separate, unite, dates, and case_when()</h3>
-<h4 class="author">ESM 206 Fall 2020</h4>
+<h4 class="author">ESM 206 Fall 2020 + Will Geiken</h4>
 
 </div>
 
@@ -406,11 +406,11 @@ sw_sep_hair &lt;- starwars %&gt;% # Start with starwars
 <p>**Note: You should get a warning about one piece dropped. What happens to the name in Row 49, which contains two dashes?</p>
 <pre class="r"><code># Your code here: 
 sw_split_name &lt;- starwars %&gt;% # Start with starwars
-  separate(col = name, # Separate the name column...
+  separate(col = name, # Separate the name column
            into = c(&quot;name_1&quot;,&quot;name_2&quot;), # Into two columns &#39;name_1&#39; &amp; &#39;name_2&#39;
            sep = &quot;-&quot; # Separated at the first dash
   )
-# I did not receive a warning about one piece being dropped. However, &quot;Mundi&quot; was dropped from Ki-Adi-Mundi&#39;s name as it was after the second dash.</code></pre>
+# I did not receive a warning about one piece being dropped. However, &quot;Mundi&quot; was dropped from Ki-Adi-Mundi&#39;s name as it was after the second dash. Poor guy can&#39;t catch a break. First he&#39;s gunned down on Mygeeto, now we&#39;re cutting off the last part of his name...</code></pre>
 </div>
 <div id="b.-follow-me" class="section level4">
 <h4>1B. Follow me</h4>
@@ -439,9 +439,9 @@ sw_sep_names &lt;- starwars %&gt;% # Start from starwars data
 sw_skin_sep &lt;- starwars %&gt;% # Start from starwars data
   separate(col = skin_color, # Separate the `skin_color` column
            into = c(&quot;skin_1&quot;,&quot;skin_2&quot;), # Into two columns
-           sep = &quot;,&quot;, # Creating the separation at the first *comma*
+           sep = &quot;,&quot;, # Creating the separation at the first comma
            extra = &quot;merge&quot;, # If additional spaces, merge all into second column
-           remove = FALSE) # And *do not* remove the original column</code></pre>
+           remove = FALSE) # And keep the original column</code></pre>
 </div>
 </div>
 <div id="tidyrunite" class="section level3">
@@ -470,8 +470,8 @@ mpg_make_model &lt;- mpg %&gt;% # Start with mpg
 mpg_model_class &lt;- mpg %&gt;% # Start with mpg
   unite(col = model_class, # Create a new column called &#39;model_class&#39;
         c(model, class), # That combines the model &amp; class columns
-        sep = &quot;-&quot;, # Puts &quot;-&quot; between the pieces
-        remove = FALSE # And *do not* remove the original columns
+        sep = &quot;-&quot;, # Put a &quot;-&quot; between the pieces
+        remove = FALSE # And keep the original columns
         ) </code></pre>
 </div>
 </div>
@@ -576,11 +576,21 @@ points_by_month</code></pre>
 <li>Find the <em>number</em> of Gasol’s hook shots recorded (not necessarily scored) by <strong>month</strong> (hint: <code>count(month)</code>) for the 2008 - 2009 season</li>
 </ul>
 <pre class="r"><code># Your code here: 
-gasol_hookshots &lt;- lakers %&gt;% 
-  filter(player == &quot;Pau Gasol&quot; &amp; type == &quot;hook&quot;) %&gt;%
-  mutate(date = ymd(date)) %&gt;% 
-  mutate(month_pg_hook = month(date)) %&gt;% 
-  count(month_pg_hook)</code></pre>
+gasol_hookshots &lt;- lakers %&gt;% #create a new data set &quot;gasol_hookshots&quot;
+  filter(player == &quot;Pau Gasol&quot; &amp; type == &quot;hook&quot;) %&gt;% #filter by player and shot type.
+  mutate(date = ymd(date)) %&gt;% #update the date column so it&#39;s in &quot;Date&quot; class
+  mutate(month_pg_hook = month(date)) %&gt;%  #add a new column for month
+  count(month_pg_hook)  #add up the hookshot attempts in each month, which are now stored in the gasol_hookshots subset.
+
+gasol_hookshots</code></pre>
+<pre><code>##   month_pg_hook  n
+## 1             1 19
+## 2             2 16
+## 3             3 20
+## 4             4 14
+## 5            10  2
+## 6            11 14
+## 7            12 10</code></pre>
 </div>
 </div>
 <div id="dplyrcase_when" class="section level3">
@@ -614,10 +624,10 @@ storm_season &lt;- storms %&gt;% # Start from storms data
 <p>Create a new version of storms called <code>storms_danger</code> in which you add a new column <code>danger</code> where if the status matches “hurricane”, then the danger column contains “high”; if the status is anything other than “hurricane”, then the danger column contains “moderate”. <strong>Hint:</strong> remember that when looking for a match, we use <code>==</code>.</p>
 <p>Note: If you add another condition within <code>case_when()</code> that is <code>TRUE ~ &quot;some thing&quot;</code>, then any entry that hasn’t been specified by previous conditions will get that “catch all” statement.</p>
 <pre class="r"><code># Your code here: 
-storms_danger &lt;- storms %&gt;% 
-  mutate(danger = case_when(
-    status == &quot;hurricane&quot; ~ &quot;high&quot;,
-    TRUE ~ &quot;moderate&quot;))</code></pre>
+storms_danger &lt;- storms %&gt;% #create a new subset &quot;storms_danger&quot;
+  mutate(danger = case_when( #add a column labelled &quot;danger&quot; that reads
+    status == &quot;hurricane&quot; ~ &quot;high&quot;, #&quot;high&quot; when the status is &quot;hurricane&quot;
+    TRUE ~ &quot;moderate&quot;)) #or &quot;moderate for any other status</code></pre>
 </div>
 </div>
 <div id="practice-version-control-wgit" class="section level2">

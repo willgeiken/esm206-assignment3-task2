@@ -1,7 +1,7 @@
 ---
 title: "Follow me: more data wrangling tools"
 subtitle: "separate, unite, dates, and case_when()"
-author: "ESM 206 Fall 2020"
+author: "ESM 206 Fall 2020 + Will Geiken"
 output: html_document
 ---
 
@@ -58,11 +58,11 @@ Make sure to `View()` the resulting data frame (remember: run `View()` in the Co
 ```{r}
 # Your code here: 
 sw_split_name <- starwars %>% # Start with starwars
-  separate(col = name, # Separate the name column...
+  separate(col = name, # Separate the name column
            into = c("name_1","name_2"), # Into two columns 'name_1' & 'name_2'
            sep = "-" # Separated at the first dash
   )
-# I did not receive a warning about one piece being dropped. However, "Mundi" was dropped from Ki-Adi-Mundi's name as it was after the second dash.
+# I did not receive a warning about one piece being dropped. However, "Mundi" was dropped from Ki-Adi-Mundi's name as it was after the second dash. Poor guy can't catch a break. First he's gunned down on Mygeeto, now we're cutting off the last part of his name...
 ```
 
 #### 1B. Follow me
@@ -98,9 +98,9 @@ Make sure to `View()` the resulting data frame (remember: run `View()` in the Co
 sw_skin_sep <- starwars %>% # Start from starwars data
   separate(col = skin_color, # Separate the `skin_color` column
            into = c("skin_1","skin_2"), # Into two columns
-           sep = ",", # Creating the separation at the first *comma*
+           sep = ",", # Creating the separation at the first comma
            extra = "merge", # If additional spaces, merge all into second column
-           remove = FALSE) # And *do not* remove the original column
+           remove = FALSE) # And keep the original column
 
 ```
 
@@ -139,8 +139,8 @@ In the code chunk below, starting from the `mpg` data create a new data frame ca
 mpg_model_class <- mpg %>% # Start with mpg
   unite(col = model_class, # Create a new column called 'model_class'
         c(model, class), # That combines the model & class columns
-        sep = "-", # Puts "-" between the pieces
-        remove = FALSE # And *do not* remove the original columns
+        sep = "-", # Put a "-" between the pieces
+        remove = FALSE # And keep the original columns
         ) 
 
 ```
@@ -247,12 +247,13 @@ Starting from the `lakers` dataset, create a new dataset called `gasol_hookshots
 
 ```{r}
 # Your code here: 
-gasol_hookshots <- lakers %>% 
-  filter(player == "Pau Gasol" & type == "hook") %>%
-  mutate(date = ymd(date)) %>% 
-  mutate(month_pg_hook = month(date)) %>% 
-  count(month_pg_hook)
+gasol_hookshots <- lakers %>% #create a new data set "gasol_hookshots"
+  filter(player == "Pau Gasol" & type == "hook") %>% #filter by player and shot type.
+  mutate(date = ymd(date)) %>% #update the date column so it's in "Date" class
+  mutate(month_pg_hook = month(date)) %>%  #add a new column for month
+  count(month_pg_hook)  #add up the hookshot attempts in each month, which are now stored in the gasol_hookshots subset.
 
+gasol_hookshots
 ```
 
 ### 4. `dplyr::case_when()`
@@ -301,10 +302,10 @@ Note: If you add another condition within `case_when()` that is `TRUE ~ "some th
 
 ```{r}
 # Your code here: 
-storms_danger <- storms %>% 
-  mutate(danger = case_when(
-    status == "hurricane" ~ "high",
-    TRUE ~ "moderate"))
+storms_danger <- storms %>% #create a new subset "storms_danger"
+  mutate(danger = case_when( #add a column labelled "danger" that reads
+    status == "hurricane" ~ "high", #"high" when the status is "hurricane"
+    TRUE ~ "moderate")) #or "moderate for any other status
 
 ```
 
