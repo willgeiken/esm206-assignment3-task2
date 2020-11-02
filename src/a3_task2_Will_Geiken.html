@@ -627,7 +627,7 @@ storm_season &lt;- storms %&gt;% # Start from storms data
 storms_danger &lt;- storms %&gt;% #create a new subset &quot;storms_danger&quot;
   mutate(danger = case_when( #add a column labelled &quot;danger&quot; that reads
     status == &quot;hurricane&quot; ~ &quot;high&quot;, #&quot;high&quot; when the status is &quot;hurricane&quot;
-    TRUE ~ &quot;moderate&quot;)) #or &quot;moderate for any other status</code></pre>
+    TRUE ~ &quot;moderate&quot;)) #or &quot;moderate&quot; for any other status</code></pre>
 </div>
 </div>
 <div id="practice-version-control-wgit" class="section level2">

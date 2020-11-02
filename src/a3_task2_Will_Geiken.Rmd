@@ -305,7 +305,7 @@ Note: If you add another condition within `case_when()` that is `TRUE ~ "some th
 storms_danger <- storms %>% #create a new subset "storms_danger"
   mutate(danger = case_when( #add a column labelled "danger" that reads
     status == "hurricane" ~ "high", #"high" when the status is "hurricane"
-    TRUE ~ "moderate")) #or "moderate for any other status
+    TRUE ~ "moderate")) #or "moderate" for any other status
 
 ```
 
